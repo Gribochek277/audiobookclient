@@ -1,0 +1,22 @@
+repository: serhii/audiobookclient
+commit: a1d6355d947d088129cb2382e430110a0cfc8ae0
+date: 2026-10-04T01:17:44+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+M0: bootstrap — config, doctor, CLI skeleton, CI
+- config.toml (silo/cache/player) with validation + 0600 perms
+- generated rclone remote (smb/ftp) with rclone-obscure password
+  + fingerprint sidecar so the salted encoding is stable per inputs
+- doctor: binaries (rclone/mpv/ffprobe), config, NAS reachability
+- setup: writes example config
+- Gitea Actions CI stub (fmt/clippy/test)
+
+Verified against real silo (192.168.50.90): SMB session establishes,
+placeholder creds correctly rejected with logon-invalid.
+
+---
+Source code is NOT published on GitHub.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
