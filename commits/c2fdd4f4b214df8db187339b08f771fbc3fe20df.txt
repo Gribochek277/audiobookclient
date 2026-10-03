@@ -1,0 +1,27 @@
+repository: serhii/audiobookclient
+commit: c2fdd4f4b214df8db187339b08f771fbc3fe20df
+date: 2026-10-04T02:44:08+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+M2: rclone transport (lsjson/cat/copyto, atomic state write, hard timeouts) + list/scan CLI
+- RcloneTransport shells out to rclone against the generated silo remote;
+  every call goes through run_t with a wall-clock timeout (dead NAS cannot
+  hang the app; child is killed)
+- verified protocol on rclone 1.75.1: lsjson -R (list), cat (read),
+  copyto (single atomic write: .partial upload + server-side SMB rename —
+  no separate move needed; move/moveto refuse to overwrite existing files)
+- fake-rclone bash shim in tests maps silo: onto a local dir and delegates
+  to the real rclone binary — full protocol covered headless, no NAS needed
+- library scan rule refined: a dir with subdirs is a container, never a
+  book (Genre/Solo.flac + Genre/Series/ -> single book + chaptered book)
+- CLI: list (books + progress from shared state on NAS), scan (layout
+  dry-run report with warnings), hms formatting
+
+Gate: cargo fmt --check && cargo clippy --all-targets -- -D warnings && cargo test — green (28 tests)
+
+---
+Source code is NOT published on GitHub.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
