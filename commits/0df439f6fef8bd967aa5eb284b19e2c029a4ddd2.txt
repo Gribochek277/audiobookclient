@@ -1,0 +1,21 @@
+repository: serhii/audiobookclient
+commit: 0df439f6fef8bd967aa5eb284b19e2c029a4ddd2
+date: 2026-10-04T07:18:48+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+M6: TUI library — list, continue bar, search, filter, sort
+- tui_model: pure view-model (rows/filter/sort/query/selection/continue),
+  11 unit tests
+- tui_app: ratatui 0.30 + crossterm 0.29 event loop; handle_key is a pure
+  state transition, render is tested via TestBackend (6 tests)
+- CLI: no-arg launch and 'audiobook tui' open the TUI; data comes from the
+  local SQLite store, degrading to an empty library on store errors
+- UI strings in English (book data stays as-is); width-aware row layout,
+  ListState-driven highlight/scroll, progress bar + time formatting
+
+---
+Source code is NOT published on GitHub.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
