@@ -1,0 +1,34 @@
+repository: serhii/audiobookclient
+commit: ad9447f9822d1304b71d6c54e853eddc511d51fb
+date: 2026-10-04T05:48:42+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+M5: mpv JSON-IPC player module (spawn/load/pause/seek/time/events) with real-mpv tests
+Single shared IPC connection (mpv's property_answer is per-connection, events are
+broadcast); reader thread with 200ms poll + line framing; send() waits for the
+connection with a bounded timeout; request ids start at 1<<20 so they never
+collide with mpv's auto-assigned ack ids.
+
+Verified protocol facts (mpv 0.41):
+- property replies carry no "event" field, only data/request_id/error
+- every command gets an ack with an auto-incrementing request_id
+- with --ao=null this build: paused seeks land ~0.2s short and end-file never
+  fires; with a real audio output seeks are exact and end-file fires normally
+  (tests use the real ao muted when /dev/snd exists, null-ao fallback for CI;
+  AB_TESTS_AO_NULL forces the headless path)
+- seeks are asynchronous: callers must poll time-pos until it settles
+
+rclone transport hardened while at it:
+- shebang-script binaries are executed via /bin/bash (avoids the kernel's
+  ETXTBSY exec-check on freshly written scripts and PATH-dependent shebang
+  resolution; a real ELF like rclone still runs directly)
+- spawn retries with backoff on ETXTBSY
+- write_atomic temp file is unique per call (pid+nanos+rel) - previously two
+  concurrent write_atomics could collide on the same path
+
+---
+Source code is NOT published on GitHub.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
