@@ -1,0 +1,32 @@
+repository: serhii/audiobookclient
+commit: 540f2efcf0dba5e8e6a6b9473fc393aa6388d24b
+date: 2026-10-04T10:46:43+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+M7: TUI book screen — playback, auto-advance, resume, cleanup prompt
+playback.rs: Book/Core/Controller (pure core, FakeDriver/FakeSource seams),
+Driver/ChapterSource traits; time-based end-of-chapter fallback.
+
+End detection (measured on this machine, mpv 0.41.0): end-file never
+arrives (neither with --ao=null nor real audio), so a chapter ends when
+time-pos reaches duration - 0.35s; each chapter's duration is ffprobed
+locally in load_chapter (file already cached) and persisted to
+book_chapters, so the fallback always has a bound.
+
+player.rs: observe_property in both mpv formats (>=0.41:
+observe_property <id> <name> -> property-change; older: property).
+
+TUI: BookSession (space/±10s/n/p, q-Esc save+back; Finished: y cleanup /
+n keep), record saved to SQLite on leave, chapter-durations learned on
+open (cached files) and on advance. Esc clears the query outside search
+too; active query shown in the status line.
+
+tests/playback_real.rs: 3 E2E tests against real mpv (two-chapter
+auto-advance + Finished, resume mid-chapter, unknown durations).
+
+---
+Source code is NOT published on GitHub.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
