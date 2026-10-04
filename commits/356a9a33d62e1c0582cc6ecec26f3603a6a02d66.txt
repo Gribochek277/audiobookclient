@@ -1,0 +1,25 @@
+repository: serhii/audiobookclient
+commit: 356a9a33d62e1c0582cc6ecec26f3603a6a02d66
+date: 2026-10-05T02:55:33+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+M10 fix: single-threaded FTP downloads, longer idle timeout
+The Synology vsftpd drops the FTP control channel mid-transfer when rclone
+uses its default multi-threaded copy (several concurrent data connections):
+"Failed to copy: multi-thread copy: failed to open source: write: broken
+pipe". Downloads now use --multi-thread-streams 1.
+
+Also raise the per-IO idle timeout from 60s to 300s (rclone default): the
+NAS has longer hiccups than 60s, and a mid-transfer failure lost a ~400 MB
+chapter that had to be re-downloaded. --contimeout 15s still kills dead
+connections fast.
+
+Verified against the real NAS: 03.mp3 (410 MB) downloads cleanly with the
+new flags; the earlier stalls/failures were multi-connection races.
+
+---
+Source code is NOT published on GitHub.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
