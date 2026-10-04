@@ -1,0 +1,26 @@
+repository: serhii/audiobookclient
+commit: 626850aec19015e8139b44d2ac8cb2a01fc79e91
+date: 2026-10-04T11:45:55+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+M8: TUI sync — background worker, conflict dialog, startup/exit sync
+- sync_io.rs: run_sync orchestration (transport + store + pure engine) and
+  spawn_sync worker (conflicts forwarded to the UI over a channel; the
+  engine stays a pure function)
+- TUI: automatic startup sync, 's' manual sync (sort moves to 'o'),
+  in-TUI conflict dialog ([d] device / [s] server), keys swallowed while
+  syncing, model merged on Done (updated + pulled books)
+- exit sync: final push after a clean quit when the store is dirty
+  (unattended conflicts keep the device's progress)
+- LocalStore: 10 s SQLite busy timeout (TUI + sync worker)
+- cmd_sync reuses sync_io::run_sync (same engine, dialoguer prompt)
+- tests: 4 orchestration (push/pull/conflict/worker), 3 TUI sync, 1 merge
+  (99 total); live-verified: start-push, up-to-date, conflict->device,
+  exit-sync push
+
+---
+Source code is NOT published on GitHub.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
