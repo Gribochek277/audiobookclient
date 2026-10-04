@@ -1,0 +1,13 @@
+repository: serhii/audiobookclient
+commit: 6923c73570c788a1a31564366e56526b755f4f77
+date: 2026-10-05T02:56:02+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+README: document the vsftpd multi-connection quirk
+
+---
+Source code is NOT published on GitHub.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
