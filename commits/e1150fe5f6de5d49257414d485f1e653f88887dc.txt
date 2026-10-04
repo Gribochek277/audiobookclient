@@ -1,0 +1,37 @@
+repository: serhii/audiobookclient
+commit: e1150fe5f6de5d49257414d485f1e653f88887dc
+date: 2026-10-04T21:27:08+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+M9: real silo transport (FTP), library migration, structure import
+Transport for the actual NAS (silo, /home/audiobooks over FTP):
+- config.rs: generated FTP rclone section adds disable_mlsd=true
+  (Synology answers MLSD with a malformed '250- Start of list' header
+  that rclone's client rejects); rclone.rs: lsjson size is i64
+  (LIST-based backends report -1 for directory sizes).
+- vsftpd glob quirk documented: LIST <path> with [ ] in the name lists
+  empty; the migration renames the two affected book folders.
+
+One-shot migration (user approved 'no deletions'): 5 books ->
+canonical 'Frank Herbert - <Title>' layout, duplicates/junk moved to
+hidden .backup/ (invisible to the app's scan). All server-side
+RNFR/RNTO renames.
+
+Sync engine: NAS books unknown to both sides are now imported into the
+local store with an empty record (report.imported), so a fresh device
+sees the whole library after its first sync.
+
+player.rs: documented that mpv 0.41 only accepts the object IPC form
+({'command': [...]}); the bare array form is silently dropped and looks
+like a dead socket.
+
+Verified end to end against silo: scan 5 books / 105 chapters, TUI
+startup sync '5 imported', FTP chapter download + playback, exit sync
+'1 pushed' with the state file written to the NAS.
+
+---
+Source code is NOT published on GitHub.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
