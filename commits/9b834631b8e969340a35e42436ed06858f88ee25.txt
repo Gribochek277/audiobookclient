@@ -1,0 +1,33 @@
+repository: serhii/audiobookclient
+commit: 9b834631b8e969340a35e42436ed06858f88ee25
+date: 2026-10-04T03:38:44+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+M3+M4: local cache + sync engine with conflict resolution
+M3 cache.rs:
+- on-demand download, atomic (file.partial + rename) — an interrupted
+  download never masquerades as a finished file
+- cache status / clean --finished / clean --all, stale .partial removal
+
+M4 sync.rs (pure engine, resolver injected) + store.rs (SQLite local store):
+- per-book model: shared file version (base_updated_at) + local dirtiness
+  (dirty_since); device-local fields never leave the local SQLite
+- push  = dirty + shared file untouched since base
+- pull  = clean + remote differs
+- conflict = dirty + file changed since base -> Device/Server prompt
+- book deleted from NAS -> reported missing, local record kept; stale
+  shared record dropped
+- CLI: sync (dialoguer conflict prompt, client name = hostname),
+  cache status/clean
+- config: client_name() helper (hostname, fallback 'local')
+
+tests: 42 lib + 3 integration (tests/sync_flow.rs runs the full
+scan -> store -> sync -> write-back flow on a LocalDirTransport fake NAS)
+Gate: fmt + clippy -D warnings + test — green (46 tests)
+
+---
+Source code is NOT published on GitHub.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
