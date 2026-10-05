@@ -1,0 +1,42 @@
+repository: serhii/audiobookclient
+commit: 15641e96baee165d18fb7b9e7207b97cd6b17363
+date: 2026-10-05T21:25:14+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Perf & UX: async book open, unlocked UI during sync, spinners, hjkl, chapter priority
+The two biggest sources of "the app is slow" were network work on the main
+thread and a UI that locked while the sync ran:
+
+- Book opening now runs on a dedicated worker thread (store/NAS lookup,
+  ffprobe duration learning, mpv spawn, cache warm). The library stays
+  fully navigable while a book opens; a braille spinner in the status
+  line shows the in-flight open ("opening <book> …"). Quitting or going
+  back mid-open aborts it (the worker quits the spawned player).
+- A running sync no longer swallows keys: navigation, sorting, opening
+  and quitting all work while it runs (only a pending conflict dialog
+  waits for an answer). The sync chip animates (⠋ syncing…).
+- Download queue: jumping to a chapter that is still ahead in the queue
+  no longer makes the user wait for everything before it. After a 2.5 s
+  grace period the pending chapter is moved to the front of a running
+  queue (reorder channel, no in-flight transfer is killed) or a
+  finished queue is restarted from it.
+- Chapter durations are learned by the background download queue instead
+  of blocking the UI thread with ffprobe on every chapter switch.
+- hjkl everywhere: library h/l = up/down (aliases of k/j), book
+  h/l = prev/next chapter (aliases of p/n).
+- The pending chapter line now shows a spinner ("⠙ downloading
+  chapter N…").
+
+Tests: 137 lib (new: background open with live UI, stale-open drop,
+conflict-only key lock, pending-priority decision table, navigation
+during sync) + integration; gate fmt/clippy/test green; live E2E on the
+NAS library verified (spinner, open, chapter jumps, waveform, clean
+quit with exit sync).
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
