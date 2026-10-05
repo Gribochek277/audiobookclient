@@ -1,0 +1,20 @@
+repository: serhii/audiobookclient
+commit: af74a20548aeeeee8024f476771cd8b704821d19
+date: 2026-10-05T04:55:01+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Issue #1: --help documents audio formats and library layout
+- help.rs: shared 'Library & formats' section — formats built from the
+  scanner's AUDIO_EXTS (single source, no copy), layout rules documented.
+- main.rs: clap derive takes compile-time strings, so the footer is
+  attached at runtime (after_help/after_long_help).
+- tests: unit tests for the section + integration test running the real
+  binary's --help and asserting every format and rule is present.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
