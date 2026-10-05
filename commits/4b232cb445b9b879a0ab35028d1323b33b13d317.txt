@@ -1,0 +1,37 @@
+repository: serhii/audiobookclient
+commit: 4b232cb445b9b879a0ab35028d1323b33b13d317
+date: 2026-10-05T06:23:57+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Issue #3: TUI ?-help overlay; fix flaky end-of-chapter detection
+Help overlay (issue #3):
+- The `?` key opens an overlay on both screens: the screen's keys +
+  the shared library section (formats & layout) from help.rs; `?` or
+  esc close it; keys are swallowed while open; `?` while typing a
+  search query is still typed (not swallowed).
+- Rendered centered, hidden on terminals too small for the box.
+- 4 new TestBackend tests.
+
+End-of-chapter fix (uncovered while the gate's playback_real test flaked):
+mpv 0.41 (verified) emits no end-file/idle EVENT and never updates the
+idle PROPERTY when a file ends — time-pos simply freezes.
+- Controller: drop the rest of a queued event batch after a chapter
+  change — stale time events from the old chapter could fake the end of
+  the new one (instant bogus Finished).
+- Controller: stall detector — a frozen time for 1.5 s after the file
+  played ends the chapter (covers unknown durations and lost event
+  streams). Off while paused, while a chapter load is pending, and
+  before the file started playing.
+- Controller: pending_load retries a failed auto-load (transient IPC
+  stalls self-heal on the next tick).
+- Driver: is_idle() seam (Player: get_property idle; fakes: None).
+- 4 new unit tests: stale batch, stall end, pending/pause guards.
+- playback_real: stable over 6 consecutive runs (was flaky ~40%).
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com

@@ -1,7 +1,7 @@
 > Sanitized mirror of Forgejo `serhii/audiobookclient`. Source code is not published here.
 >
 > Commit texts: `commits/`. Need the code? Email: sergeyalpatov1@gmail.com
-> Source: Forgejo `serhii/audiobookclient` | Synced: 2026-10-05T02:02:24Z
+> Source: Forgejo `serhii/audiobookclient` | Synced: 2026-10-05T21:59:24Z
 
 ---
 
@@ -25,6 +25,7 @@ anywhere, offline), and syncs "where am I" progress back to the NAS over the hom
 |---|---|
 | `rclone` | transport to the NAS (SMB share / FTP) |
 | `mpv` | audio playback (JSON IPC) |
+| `ffmpeg` | audio visualizer: per-chapter PCM tap (optional; a synthetic animation is the fallback) |
 | `ffprobe` | chapter/book durations (optional, lazy) |
 
 ## Keys
@@ -84,6 +85,13 @@ vsftpd treats `LIST <path>` as a glob, so folders like `… [narrator]` list as 
 (the one-shot migration renames them into the canonical layout). Downloads run
 `--multi-thread-streams 1`: the stock vsftpd drops the control connection when rclone
 opens several data channels for one file ("broken pipe" mid-transfer).
+
+mpv note (verified on this machine's mpv 0.41.0): there is no `waveform`
+property in mpv's JSON-IPC (not in this build, not in the upstream source)
+— the audio visualizer decodes cached chapters with ffmpeg into a PCM ring
+buffer instead (see `src/viz.rs`, issue #4). `end-file`/`idle` events are
+also unreliable here; chapter ends are detected from a frozen `time-pos`
+(see `src/playback.rs`).
 
 ## Library layout (auto-detected)
 
