@@ -1,0 +1,34 @@
+repository: serhii/audiobookclient
+commit: a18b3f8ce988ba7a2f3f5313f80bf63a33d24a4d
+date: 2026-10-06T01:15:31+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Reap helpers orphaned by a hard-killed run
+A SIGKILL, a crash or a power loss cannot run any cleanup, so an in-flight
+`rclone copyto` (or an idle mpv) can survive the TUI and keep working. The
+next start now reaps them:
+
+- `proc::reap_orphans(markers)`: kills processes whose command line carries
+  one of our markers (the rclone config path, the cache dir, the mpv socket
+  name) and whose parent is not a live TUI instance. The parent test uses the
+  parent's own executable (not the whole command line — a shell that merely
+  cd's into the project or mentions "audiobook" must not count, which would
+  have disabled reaping entirely) and also covers orphans reparented to a
+  subreaper (`systemd --user`) instead of PID 1.
+- `proc::reap_stale_sockets()`: removes `ab-mpv-*.sock` files whose owner pid
+  is gone, keeping a live instance's socket.
+- Wired into `tui()`; prints one line only when it actually cleaned something.
+
+Tests: find-by-cmdline, the kill path (a helper parented by a plain shell is
+reaped), the safety path (a helper of a live instance survives, as does the
+shell that started it), and socket cleanup. Verified end-to-end: a fake
+orphan carrying the rclone-config marker is gone after the app starts with
+"cleaned up 1 stale helper process(es)".
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
