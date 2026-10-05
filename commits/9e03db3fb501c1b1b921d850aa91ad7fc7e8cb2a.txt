@@ -1,0 +1,33 @@
+repository: serhii/audiobookclient
+commit: 9e03db3fb501c1b1b921d850aa91ad7fc7e8cb2a
+date: 2026-10-05T07:34:01+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Issue #2: spike — mpv has no waveform property; plan B for the visualizer
+Findings (recorded in the plan file and README):
+- `get_property waveform` / `audio-waveform` -> "property not found" on
+  mpv 0.41.0 (both --ao=null and a real muted output).
+- `observe_property(waveform)` is acked but emits zero events (the
+  property simply does not exist).
+- Upstream v0.41.0 source: no "waveform" anywhere. mpv never exposed
+  audio samples over JSON-IPC — the spike's premise is disproved.
+- Bonus facts: `playback-status` is also missing in this build; the
+  `idle` property is stale (always true with --idle=yes); `core-idle`
+  is live but flips true ~0.4-0.5s BEFORE a local file actually ends —
+  not usable as an end trigger. The #3 end detection (time fallback +
+  1.5s stall) stays.
+- Player: generalised observe_property (new 0.41 numeric-id form with
+  legacy fallback) and added a generic get_property (get_idle now
+  delegates to it).
+
+Decision for #4/#5: real samples via an ffmpeg PCM tap per cached
+chapter (decode to a ring buffer, window by time-pos); synthetic
+animation only when ffmpeg is unavailable.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
