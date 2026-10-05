@@ -1,0 +1,52 @@
+repository: serhii/audiobookclient
+commit: cf0de52a79c8cd39f82a4b19571448c1520945b2
+date: 2026-10-06T00:51:59+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Spectrum analyser, full-height bars, and a resource-lifecycle audit
+Visualiser (closes the WMP/kava-style phase 2):
+- The book screen draws bars over the WHOLE free area instead of one line,
+  so the empty space is gone: each column grows from the bottom, full rows
+  use `█`, the top row carries the fractional part as a `▁`-`▇` block.
+- Horizontal scrolling is gone. A sliding time-domain window smeared/ripped
+  horizontally (the 48 data columns were stretched over ~78 screen columns,
+  so the picture jumped 1-2 cells unevenly every frame). The display is now a
+  spectrum analyser: pure-Rust iterative radix-2 Cooley-Tukey FFT (Hann
+  window, 4096 samples ~186 ms) mapped onto 48 log-spaced bands (40 Hz -
+  11 kHz) with dB-normalised heights and a falling-bar decay.
+- The synthetic fallback now generates drifting *tones*: the previous slow
+  envelope had no energy above 40 Hz, i.e. it rendered as silence.
+- The tap's decoder is refreshed every second pump (~5 fps). A full-width
+  animated bar chart at 10 fps wrote ~37k terminal characters/s; the analyser
+  at 5 fps writes ~7.8k (and ~245/s when paused), which is what the terminal
+  and any multiplexer in between actually have to parse.
+
+Resource lifecycle (every helper, thread and connection):
+- New `proc` registry: rclone and ffmpeg are adopted at spawn; `kill_all()`
+  runs on every exit path (normal quit, error, and a new panic hook that also
+  restores the terminal). Previously a quitting TUI orphaned its `rclone
+  copyto`, which kept downloading for minutes at ~70% CPU (observed live).
+- Downloads are cancellable end to end: `Transport::download_cancellable` +
+  the queue's cancel flag stop the in-flight transfer within one poll and
+  remove the `.partial`; leaving a book no longer keeps the NAS busy.
+- The ffmpeg tap keeps its child in a shared slot, so dropping the tap kills
+  the decoder even if the worker is wedged in a pipe read (it used to be
+  detached and left decoding into the void). A leftover debug `eprintln!` in
+  that worker (which corrupts the TUI in raw mode) is gone.
+- Exit sync is bounded (30 s) and actually returns on timeout: it used to
+  print "timed out" and loop forever, hanging the shell after the TUI closed.
+- The playing position is autosaved to the local store every 30 s; before,
+  it was only written when leaving the book, so a crash/kill lost the whole
+  session (the app exists precisely to remember where you stopped).
+
+Tests: 142 lib (+ spectrum/FFT band tests, cancel-kills-the-helper, no-partial
+-after-cancel, process registry, autosave, navigation during sync) plus the
+integration suites; fmt/clippy/test green; live E2E on the NAS library.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
