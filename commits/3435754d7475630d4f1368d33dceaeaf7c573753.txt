@@ -1,0 +1,44 @@
+repository: serhii/audiobookclient
+commit: 3435754d7475630d4f1368d33dceaeaf7c573753
+date: 2026-10-05T14:44:12+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Issue #4: book-screen live waveform (ffmpeg PCM tap + synthetic fallback)
+A live waveform under the progress bar while a chapter plays:
+
+- New viz module: an ffmpeg PCM tap decodes the current cached chapter in
+  the background (5x realtime, throttled) into a 90s ring buffer; the UI
+  asks for a 3s window and renders 48 block bars with decay. Without
+  ffmpeg (or when the file isn't local) a deterministic synthetic source
+  keeps the bar alive, so the UI never goes silent on this element.
+- The tap follows playback: chapter switches restart the decoder on the
+  new file, backward seeks re-seek it, and a 90s re-seek-storm cap plus
+  a 150ms re-seek suppression keep CPU flat (252% -> 1.7% in the first
+  spike) while the bar never gaps.
+- Robustness found during live testing:
+  * mpv 0.41 can deliver the previous file's final time-pos event AFTER
+    file-loaded; load_chapter now flushes queued events and a
+    "switch guard" in Core drops inconsistent times for the new file.
+  * The worker now processes commands between decoded chunks (a Restart
+    sent mid-stream is honored within a second, not at EOF).
+  * A long pause no longer fakes a stalled chapter: the stall clock
+    freezes while paused (regression test added).
+  * Poisoned-mutex recovery on exit instead of a cascade panic.
+- TUI: the book screen shows the waveform row, and "left" (time until
+  end) is now always rendered (falling back to the current chapter's
+  remaining time when the book total is not measured yet).
+- Overlays (help, sync conflict) dim the full screen first: the
+  diff-based renderer otherwise left stale cells around the dialog box.
+- List rows: the name pad is captured (min 24) so a long title can no
+  longer push the progress block past the row edge.
+
+Verified live: open/n/p/pause/resume/help/exit on a real 22h book with
+the waveform animating on every chapter, no re-seek storm, no panics.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
