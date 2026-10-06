@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: 674f00b006c5f0d70ba06c956408929ebb8b860a
+date: 2026-10-06T18:19:45+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+status: fix duplicated ticket rows (stale ready-for-agent entries)
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
