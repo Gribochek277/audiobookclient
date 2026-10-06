@@ -1,0 +1,25 @@
+repository: serhii/audiobookclient
+commit: 6904d5ea040603d996dce18931621b1c04d74a52
+date: 2026-10-06T13:59:46+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Clickable controls: filter/sort tabs, search focus, sync dialog, finished prompt, help
+- library header: [filter]/[sort] tabs cycle like f/o, '/ search' enters
+  search mode (columns derived from the header string at render time)
+- sync conflict dialog: [d] keep device / [s] keep server clickable; both
+  paths (keys and mouse) share resolve_sync_conflict
+- finished-book prompt: [y]es clears the cache (stays), [n]o keep leaves;
+  regions registered only while the prompt is drawn
+- help overlay: any click closes it (full-screen region, registered last so
+  it wins the hit test); region exists only while the overlay is open
+- while a search query is typed, clicks are ignored except help-close
+- 8 new unit tests (tabs, search focus, search guard, conflict x2,
+  clear yes/no, help close, prompt regions only when finished)
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
