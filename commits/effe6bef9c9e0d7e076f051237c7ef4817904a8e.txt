@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: effe6bef9c9e0d7e076f051237c7ef4817904a8e
+date: 2026-10-06T08:52:41+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Orchestrator: gates config (install/check) and recorded decisions
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
