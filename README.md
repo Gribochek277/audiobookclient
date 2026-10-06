@@ -1,7 +1,7 @@
 > Sanitized mirror of Forgejo `serhii/audiobookclient`. Source code is not published here.
 >
 > Commit texts: `commits/`. Need the code? Email: sergeyalpatov1@gmail.com
-> Source: Forgejo `serhii/audiobookclient` | Synced: 2026-10-06T02:51:49Z
+> Source: Forgejo `serhii/audiobookclient` | Synced: 2026-10-07T00:57:20Z
 
 ---
 
@@ -40,6 +40,8 @@ anywhere, offline), and syncs "where am I" progress back to the NAS over the hom
 | library | `s` | sync with the NAS (background; conflict dialog if needed) |
 | library | `g` / `G` | first / last |
 | library | `q` | quit (pushes unsynced progress if any) |
+| library | left-click | select the clicked book; a second click on the same row within 400 ms opens it (Enter) |
+| library | wheel up/down | move the selection one row, clamped at the ends |
 | book | `space` | play / pause |
 | book | `,` / `.` | seek −10 s / +10 s |
 | book | `n` / `p` | next / previous chapter |
