@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: 0d432aec2f56db06680f9be62f3063830d59424a
+date: 2026-10-06T15:24:56+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Merge ticket 04: 04-04-book-screen-mouse-transport-controls
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
