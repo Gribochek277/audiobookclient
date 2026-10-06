@@ -1,0 +1,49 @@
+repository: serhii/audiobookclient
+commit: bdafa0534771c07f2a037d399336007ad0c32951
+date: 2026-10-06T05:51:43+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Cache budget (10 GB) and a cached NAS listing
+**Cache budget.** The cache had no size limit; only the post-book "clear?"
+prompt and `cache clean` ever removed anything. `[cache] limit_gb` (default
+10, `0` = unlimited) now bounds it:
+
+- `cache::eviction_plan` (pure, tested) picks books to drop: finished first,
+  then least recently played, ties broken by key; it stops as soon as the
+  cache fits, and never touches the book that is open.
+- Enforced at startup (the previous run may have left it over) and when a
+  whole-book download finishes — in both cases off the UI thread, because
+  walking a multi-GB cache must not hitch the render loop. The outcome shows
+  up in the status/message line ("cache limit: freed 3.2 GB (2 books)").
+- `audiobook cache status` reports usage against the limit and by how much it
+  is over.
+
+**Cached listing.** Syncing listed the whole library (`lsjson -R`, ~2 s on
+the real NAS) on every start, exit, `s` and book-open fallback, just to learn
+which books exist. The listing is now cached in
+`~/.local/share/audiobook/nas-manifest.json` and reused for up to 6 h:
+
+- automatic syncs (startup, exit) and opening a book missing from the local
+  store use the cache when it is fresh — measured startup sync: **1120 ms
+  with the cache vs 3177 ms without** (the difference is the listing);
+- an explicit sync (`s`), the CLI, and anything older than the TTL re-list
+  for real and refresh the cache; the status line says
+  `· library list cached (s to refresh)` when a cached one was used;
+- a cached listing is never authoritative: `sync` no longer treats a book
+  absent from it as deleted on the NAS (`dropped_stale`/`missing_on_nas` are
+  skipped, and the record keeps syncing), so a stale cache cannot delete
+  shared progress. A manifest stamped in the future (clock jump) is treated
+  as stale rather than trusted forever.
+
+Tests: eviction policy (under/over limit, finished-first, protected book,
+unknown-activity order, partials ignored), manifest round-trip/corruption/
+freshness, cached-vs-forced listing selection, and the cached-listing safety
+rule. Gate green (158 lib + integration); live-verified against the NAS.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
