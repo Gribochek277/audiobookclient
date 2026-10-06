@@ -1,0 +1,32 @@
+repository: serhii/audiobookclient
+commit: b69ad60a13691b52bed598178a82f1b01bdc227e
+date: 2026-10-06T18:17:00+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Progress bar: click seeks within the whole book
+The bar was drawn with whole-book progress (pos / total) but a click only
+sought within the current chapter, so the bar never moved to the clicked
+spot on multi-chapter books. Now a click maps to frac x book_total and is
+resolved to (chapter, offset):
+
+- Book::from_total_estimated resolves positions on the estimated scale:
+  unmeasured chapters count as the average known duration, the same
+  estimator the bar's total uses, so clicks round-trip to the bar
+- same-chapter targets seek in place via the new Controller::seek_to
+  (absolute, no file reload); cross-chapter targets use the same protocol
+  as chapter-row clicks (go_chapter + begin_chapter, or pending with the
+  offset remembered for the resume)
+- no-measurement fallback (chapter-relative) kept for BookTotal::Unknown
+- also fixes Controller::seek_rel, which passed 0 to the player: the core
+  offset was updated before the driver delta was computed, so ,/. never
+  actually moved the audio (regression-tested)
+- 6 new unit tests; live pty E2E: a mid-bar click on a 15-chapter book
+  lands at 49.4% (chapter 9/15)
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
