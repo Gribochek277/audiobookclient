@@ -1,0 +1,25 @@
+repository: serhii/audiobookclient
+commit: eb463134cc9037c79dbb595e172c5ab165f7081f
+date: 2026-10-06T15:23:41+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Book screen: mouse transport controls in the footer
+- footer action words (play/pause, prev, next, download, back) are now
+  clickable buttons with the exact same code paths as the space/h/p/l/n/d/q
+  keys; they are drawn undimmed so they read as buttons
+- play/pause logic extracted to BookSession::toggle_pause (shared by the
+  key and the button); footer clicks reuse jump_chapter/start_queue/
+  leave_book
+- while the finished-book prompt is up, footer clicks are ignored except
+  'back' (prompt options and help-close keep working)
+- help overlay documents the mouse controls on both screens
+- 6 new unit tests (next/prev, play/pause, back, download, finished guard,
+  help text)
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
