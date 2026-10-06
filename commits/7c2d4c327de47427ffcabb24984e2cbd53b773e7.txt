@@ -1,0 +1,22 @@
+repository: serhii/audiobookclient
+commit: 7c2d4c327de47427ffcabb24984e2cbd53b773e7
+date: 2026-10-06T12:40:31+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Book screen: chapter list, chapter click, progress-bar seek, wheel
+- chapter list panel (38% width) beside the waveform, current chapter
+  highlighted, auto-scrolled to on chapter change
+- click a chapter row: jump (local loads, missing parks pending like l/n)
+- click the progress bar: seek within the current chapter (no-op with
+  unknown duration)
+- wheel scrolls the chapter list, clamped to the list bounds
+- 7 new unit tests; selection syncs only while the chapter is in view so
+  the List never snaps the offset back to the playing chapter
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
