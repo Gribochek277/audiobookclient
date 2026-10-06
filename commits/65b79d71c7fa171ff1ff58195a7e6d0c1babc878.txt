@@ -1,0 +1,35 @@
+repository: serhii/audiobookclient
+commit: 65b79d71c7fa171ff1ff58195a7e6d0c1babc878
+date: 2026-10-06T05:51:33+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Fix: start the chapter mpv leaves paused after a file ends
+mpv with `--idle=yes` pauses itself when a file reaches EOF. `load_chapter`
+sent `loadfile` and waited for it, but never told mpv to play again, so the
+next chapter loaded and then sat at 0.00 forever: no `time-pos` events, no
+chapter end, no book finish — the listener had to press space to make the
+book continue (and the last chapter never completed, so the "clear cache?"
+prompt never appeared). Reproduced deterministically with real mpv:
+
+    [ 1.8s] ChapterChanged { from: 0, to: 1, auto: true }
+    [   2s] ch=1 off=0.00 paused=false loaded=true    ← frozen for 20 s
+    probe: mpv pause = Some(Bool(true)), idle = Some(true)
+    ACTION: set_pause(false) → [ 7s] off=0.85 → Finished
+
+`load_chapter` now mirrors the controller's play/pause state onto mpv right
+after the load, so an auto-advanced or manually chosen chapter actually
+starts (and stays paused if the listener had paused).
+
+The fake driver models mpv's idle-pause (`pause_on_load`), and the new test
+`auto_advanced_chapter_is_started_not_left_paused` fails without the fix.
+The three real-mpv tests are serialized (a shared audio device + timing
+windows made them interfere); they now pass reliably at load average > 25 —
+previously `playback_unknown_durations_finishes` failed consistently.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com

@@ -1,7 +1,7 @@
 > Sanitized mirror of Forgejo `serhii/audiobookclient`. Source code is not published here.
 >
 > Commit texts: `commits/`. Need the code? Email: sergeyalpatov1@gmail.com
-> Source: Forgejo `serhii/audiobookclient` | Synced: 2026-10-05T22:15:35Z
+> Source: Forgejo `serhii/audiobookclient` | Synced: 2026-10-06T02:51:49Z
 
 ---
 
@@ -54,6 +54,13 @@ Playback waits for the current chapter only; already-cached chapters switch
 instantly. The book screen shows position / total / remaining; the total is an
 estimate (`~`) until every chapter's length has been measured. The library
 marks books that are fully or partly cached with `⬇`.
+
+The cache has a size budget (`[cache] limit_gb`, default **10**, `0` = no limit).
+When a whole book has finished downloading — and at startup — the cache is
+trimmed back to the budget: **finished** books go first, then the least recently
+played ones. The book currently open is never dropped, and a book is only
+evicted when the cache is actually over the limit. `audiobook cache status`
+shows usage against the limit.
 
 ## Setup
 
@@ -129,10 +136,18 @@ timestamps shown). The NAS file is written atomically (temp file + server-side r
 In the TUI, sync runs on a background worker (the UI never freezes):
 
 - **startup** — automatic; offline → the status line says so, the library stays usable;
-- **`s`** — manual sync from the library screen;
+- **`s`** — manual sync from the library screen (always re-lists the NAS);
 - **conflict** — an in-TUI dialog (`[d]` keep device / `[s]` keep server);
 - **exit** — if the local store has unsynced records, one last push runs after the
   TUI closes (conflicts there keep the device's progress, the outcome is printed).
+
+Listing the whole library costs a full recursive `lsjson -R` (~2 s on the real
+NAS), so the listing is cached locally (`~/.local/share/audiobook/nas-manifest.json`)
+and reused for up to 6 h: automatic syncs (startup, exit) and opening a book that
+is missing from the local store then skip the listing entirely. An explicit sync
+(`s`) and the CLI always re-list; anything older than the TTL refreshes itself.
+A cached listing is never treated as proof that a book was deleted on the NAS —
+the status line says `· library list cached (s to refresh)` when one was used.
 
 The CLI (`audiobook sync`) does the same round with an interactive terminal prompt.
 
