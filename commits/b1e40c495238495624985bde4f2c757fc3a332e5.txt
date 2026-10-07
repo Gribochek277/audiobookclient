@@ -1,0 +1,23 @@
+repository: serhii/audiobookclient
+commit: b1e40c495238495624985bde4f2c757fc3a332e5
+date: 2026-10-07T06:41:11+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Help overlay: show the cache budget (usage vs limit_gb)
+The cache size budget ([cache] limit_gb, default 10 GB, 0 = off) existed
+but was invisible from the app, so users did not know it could be
+configured. The help overlay now shows a live line under the library
+section on both screens, e.g. 'cache 6.7 GB/10.0 GB ([cache] limit_gb,
+0 = off)'. The line is computed when the overlay opens (a cache walk is
+not per-frame work) via a provider closure attached by the TUI entry
+point; tests and cache-less setups simply omit the line.
+cache::budget_line formats both the limited and unlimited cases; 3 new
+unit tests (1 cache, 2 TUI).
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
