@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: 46fc56483acdb1e544541ca8384e344ae9696bff
+date: 2026-10-07T07:00:49+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Orchestrator: record ticket 07 settings-persistence decision
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
