@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: 7de3b55790d5f9fdbf35d566597910bb67d477ce
+date: 2026-10-07T06:43:42+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+status: drop stale ticket 06 ready-for-agent row
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
