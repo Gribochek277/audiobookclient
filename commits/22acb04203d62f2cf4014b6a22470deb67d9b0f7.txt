@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: 22acb04203d62f2cf4014b6a22470deb67d9b0f7
+date: 2026-10-07T06:42:04+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Merge ticket 06: 06-06-cache-budget-visible-in-tui
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
