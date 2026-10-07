@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: 82cb99f121c5ec1831e213640851aecccea0aa4b
+date: 2026-10-07T07:49:45+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+status: ticket 08 in progress
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
