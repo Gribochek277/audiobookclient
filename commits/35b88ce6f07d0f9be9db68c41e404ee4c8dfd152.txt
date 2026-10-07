@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: 35b88ce6f07d0f9be9db68c41e404ee4c8dfd152
+date: 2026-10-07T15:39:19+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Merge ticket 09: 09-09-makefile-auto-install-binary-on-linux-rebuild
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
