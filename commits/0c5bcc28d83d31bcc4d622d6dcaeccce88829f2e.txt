@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: 0c5bcc28d83d31bcc4d622d6dcaeccce88829f2e
+date: 2026-10-07T07:45:32+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Ticket 07: settings entry is library-only (no footer row exists)
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
