@@ -1,0 +1,38 @@
+repository: serhii/audiobookclient
+commit: d43227c7555b8345c3e54ca527d421a7117e5dcd
+date: 2026-10-07T07:45:14+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Settings screen: structured config editing (cache + player sections)
+A new top-level Settings screen (c from the library) edits the config
+through structured rows instead of a text file:
+
+- rows are grouped by TOML section ([cache], [player]) as
+  'label: value' with the focused row marked; j/k/arrows move between
+  editable fields (headers are skipped)
+- Enter starts inline editing: the limit_gb field accepts digits only,
+  text fields accept plain text, Backspace deletes; Enter commits, Esc
+  cancels. An empty player.binary is rejected; an unset cache dir
+  renders '(default)' with the platform default in the hint column
+- commits apply to a working copy of the Config and persist through a
+  saver seam (the real Config::save(): TOML round-trip, 0600, rclone
+  remote regeneration). Invalid values and failed saves revert the
+  working copy so memory and disk stay equal; results land in the
+  screen's status line ('config saved (/path)')
+- the help overlay gains a settings key block; the library status hint
+  documents 'c — settings'. The screen is keyboard-only (no hit
+  regions) and library-only: entering it from the book screen would
+  drop the playing session
+- the TUI entry point loads the config once and feeds it to the screen;
+  Config::save is unchanged
+
+6 new unit tests; live pty E2E: limit_gb 10 -> 5 commits and the file
+on disk shows 'limit_gb = 5' under [cache].
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
