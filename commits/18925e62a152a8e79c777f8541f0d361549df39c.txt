@@ -1,0 +1,35 @@
+repository: serhii/audiobookclient
+commit: 18925e62a152a8e79c777f8541f0d361549df39c
+date: 2026-10-07T15:30:51+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Makefile: auto-install the binary on Linux rebuild
+The Makefile becomes the build entry point so the installed
+[?1049l[?1006l[?1015l[?1003l[?1002l[?1000l[?1049l command never goes stale:
+
+- make (default): cargo build (debug) + auto-install of
+  target/debug/audiobook on Linux (uname -s check)
+- make release: same for the release profile
+- make uninstall: removes the installed binary, never touches the
+  build tree
+- install goes to INSTALL_DIR/audiobook (default: ~/.local/bin,
+  overridable on the command line; the directory is created when
+  absent, mode 755, path echoed after success)
+- non-Linux platforms print a skip note and succeed, so the Makefile
+  is portable
+- README: new 'Build & install' section documenting the targets and
+  the INSTALL_DIR override; plain cargo build remains available but
+  no longer the recommended rebuild loop
+
+Verified live: make replaced the stale October binary in
+~/.local/bin, the skip path succeeds under a simulated Darwin uname,
+make release installed the release build, and make uninstall removed
+it.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
