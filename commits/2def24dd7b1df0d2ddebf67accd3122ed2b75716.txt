@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: 2def24dd7b1df0d2ddebf67accd3122ed2b75716
+date: 2026-10-07T06:55:15+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Tickets 07-08: TUI settings screen (08 blocked by 07)
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
