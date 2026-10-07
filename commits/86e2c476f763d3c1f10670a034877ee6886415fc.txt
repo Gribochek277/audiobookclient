@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: 86e2c476f763d3c1f10670a034877ee6886415fc
+date: 2026-10-07T08:08:47+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Merge ticket 08: 08-08-settings-silo-section-with-protocol-toggle
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
