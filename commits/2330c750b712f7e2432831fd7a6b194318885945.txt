@@ -1,0 +1,33 @@
+repository: serhii/audiobookclient
+commit: 2330c750b712f7e2432831fd7a6b194318885945
+date: 2026-10-07T08:07:44+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Settings screen: [silo] section with the protocol toggle
+Completes the settings form with the silo section (host, user,
+password, protocol, share, path):
+
+- the password row never shows the real value: a fixed mask on the row
+  and dots for the typed length while editing; the edit buffer starts
+  empty, so typing replaces the whole value
+- protocol is a toggle switch ([smb]/[ftp]): Enter or space flips it
+  and commits at once
+- share is inert for ftp: dimmed with an 'n/a for ftp' hint, skipped by
+  focus navigation and never written while the toggle is on ftp
+- every commit now runs SiloConfig::validate before the saver, so an
+  invalid combination (e.g. switching to smb with an empty share) is
+  rejected with the field name in the status line and the config file
+  stays untouched; a valid silo edit still regenerates the private
+  rclone remote through the existing fingerprint logic
+- 3 new unit tests (toggle + share gating, masked replacement password,
+  invalid silo rejection); live pty E2E on an isolated config: the
+  screen renders the real silo values masked, and a toggle to smb with
+  an empty share is refused by validation
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
