@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: 2f36bf836c569fc1c9a0734cf363a34704e8f417
+date: 2026-10-07T06:07:37+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Orchestrator: record ticket 06 cache-budget visibility decision
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
