@@ -1,7 +1,7 @@
 > Sanitized mirror of Forgejo `serhii/audiobookclient`. Source code is not published here.
 >
 > Commit texts: `commits/`. Need the code? Email: sergeyalpatov1@gmail.com
-> Source: Forgejo `serhii/audiobookclient` | Synced: 2026-10-07T05:09:56Z
+> Source: Forgejo `serhii/audiobookclient` | Synced: 2026-10-07T12:44:45Z
 
 ---
 
@@ -164,6 +164,22 @@ The CLI (`audiobook sync`) does the same round with an interactive terminal prom
 | `audiobook scan` (dry-run layout report) | M2 |
 | `audiobook cache status\|clean` | M3 |
 | `audiobook sync` | M4 |
+
+## Build & install
+
+The Makefile is the build entry point: on Linux **every rebuild
+automatically installs the binary**, so the `audiobook` command on the
+PATH always reflects the last build.
+
+```sh
+make            # cargo build (debug) + install to ~/.local/bin/audiobook
+make release    # cargo build --release + install
+make uninstall  # remove the installed binary
+```
+
+Install somewhere else: `make INSTALL_DIR=/usr/local/bin`. On non-Linux
+platforms the build runs normally but the install step is skipped with a
+note. Plain `cargo build` still works; it just does not install.
 
 ## Development
 
