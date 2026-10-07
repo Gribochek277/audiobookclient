@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: f8e888b35b0be0235e6c75f5d8d9034f71b79f54
+date: 2026-10-07T14:58:59+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Ticket 09: auto-install the binary on Linux rebuild (decision + status)
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
