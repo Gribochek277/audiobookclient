@@ -1,0 +1,32 @@
+repository: serhii/audiobookclient
+commit: 1c828623171a28bf9166706d039a96f6bd44f640
+date: 2026-10-08T07:58:33+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Library footer: clickable page buttons with a page indicator
+Paging now has a mouse path, matching the rest of the library's mouse
+support:
+
+- the footer shows the current page ('page 2/9') between a clickable
+  'prev page' and 'next page' word, drawn undimmed like the other
+  buttons and registered as hit regions
+- clicking either is the same code path as PageUp/PageDown (model page
+  jump + list re-sync); at the first/last page the corresponding button
+  is dimmed text with no hit region left behind
+- with a single page (page_size 0, or a library that fits) the whole
+  control disappears: no words, no indicator, no regions
+- help: the library mouse line mentions the footer buttons
+
+4 new unit tests (clicking flips pages both ways, the last page has no
+next button, a single page hides the controls, the indicator renders);
+live pty E2E on an isolated 25-book library with page_size 3: clicking
+'next page' moved the header and footer to page 2/9 with D - Book03
+first, clicking 'prev page' returned to page 1/9 with A - Book00.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
