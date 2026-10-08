@@ -1,0 +1,44 @@
+repository: serhii/audiobookclient
+commit: ff63e39502c30f2c216d5ab48d208a03a2ebd52b
+date: 2026-10-08T06:45:14+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Library prefetch: download a book before listening
+The library screen can now download a book without opening it, so a
+book is fully local (offline) before the listener starts it:
+
+- d on the selected row queues that book for a prefetch. One book
+  transfers at a time; further presses queue behind it (FIFO), and the
+  next queued book starts by itself when the current one finishes
+- the row shows live progress in place of the cached mark (⬇ 0/3 in
+  flight, ⬇ queue waiting, plain ⬇ when the book is local) and the
+  status line reports starting, queuing, completion ('downloaded X
+  (n chapters, m MB)'), 'already local', or a failure with the reason
+- a finished prefetch sets the book's cached mark; a failed one leaves
+  it alone and the queue still advances
+- no duplicated download logic: open_book's chapter/plan resolution is
+  factored into book_plan() (store first, cached manifest fallback,
+  live listing last) and reused by the prefetch loader, and the
+  queue loop inside dl::spawn is factored into dl::run() so the
+  prefetch worker reuses the exact same semantics (cached files are
+  skipped, durations probed, cancel respected)
+- plan failures (no chapter list, NAS down, bad config) travel as a new
+  DlEvent::PlanFailed, handled by DlState so the UI can explain it
+- the worker runs off the UI thread; quitting cancels the in-flight
+  transfer so no rclone outlives the TUI. Prefetch deliberately does
+  not run the cache-budget eviction (the user asked for these files);
+  the startup trim still enforces the limit
+
+8 new unit tests; live pty E2E with a staged local library: 'd' fetched
+a 3-chapter book, 'j'+'d' queued a second one ('queued Second Book (1
+waiting)'), the first finished ('downloaded Prefetch Test (3 chapters)')
+and the queued book started on its own (⬇ 1/2), leaving all 5 chapters
+in the cache.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
