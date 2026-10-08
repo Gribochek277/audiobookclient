@@ -1,0 +1,38 @@
+repository: serhii/audiobookclient
+commit: ed7d5a164ac0a5c624180c36dc4846fe7cf19414
+date: 2026-10-08T10:55:16+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Cache: surface and clean the orphaned default cache
+Changing `[cache] dir` used to strand the previous cache silently: it
+kept its gigabytes, `audiobook cache status` never mentioned it and
+`cache clean` could not reach it (found on a real machine: 3.7 GB
+sitting in ~/.cache/audiobook/files while the configured directory was
+elsewhere and empty).
+
+- new `cache::unused_default_cache(configured, default)` helper: the
+  platform default directory, but only when it exists and is not the
+  configured one
+- `audiobook cache status` reports it after the usage line, with its
+  size in the usual format and the command that removes it (only when
+  it actually holds files)
+- `audiobook cache clean --legacy` removes that directory and reports
+  the freed space; a second run says 'nothing to do: no unused default
+  cache'; --all/--finished keep meaning 'the configured cache only', and
+  --legacy can be combined with them
+- `--help` and the README cache section document the flag
+
+1 new unit test (same dir / missing dir / different existing dir / no
+platform default) plus a live check with a staged default cache (3 MB)
+and a different configured one: status reported 'unused default cache:
+3 MB in … — audiobook cache clean --legacy removes it', the clean freed
+it, the second run reported nothing to do, and the configured cache kept
+its file.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
