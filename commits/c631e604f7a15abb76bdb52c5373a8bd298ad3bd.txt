@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: c631e604f7a15abb76bdb52c5373a8bd298ad3bd
+date: 2026-10-08T07:30:54+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Merge ticket 12: 12-12-library-pagination-core
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
