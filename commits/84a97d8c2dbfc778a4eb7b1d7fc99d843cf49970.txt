@@ -1,0 +1,39 @@
+repository: serhii/audiobookclient
+commit: 84a97d8c2dbfc778a4eb7b1d7fc99d843cf49970
+date: 2026-10-08T08:56:08+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+reset: start listening over from scratch
+`audiobook reset --yes` clears every book's listening progress, in the
+local store and in the library's shared state file:
+
+- BookRecord::reset_progress zeroes position, current chapter and the
+  finished flag while keeping the metadata the UI needs (total duration,
+  last-played time, client); chapter lists and audio files are never
+  touched
+- the shared state file (audiobook-library.json, on the NAS or inside a
+  local library) is rewritten FIRST with the zeroed records and a bumped
+  updated_by/updated_at, and the local base/dirty metadata is aligned to
+  that write — so a failed write leaves everything untouched (no half
+  reset), and the next sync cannot resurrect the old positions
+- --local resets only this machine and says so explicitly, warning that
+  a library still holding the old progress may pull it back
+- without --yes the command refuses and changes nothing; `--help` and a
+  new README subsection describe it, including where progress actually
+  lives on a machine and why deleting the shared file by hand is not
+  enough (a clean local record with progress is pushed back on sync)
+
+4 new unit tests (metadata-preserving reset, store + shared file zeroed
+and a follow-up sync with nothing to push, local-only reset leaving the
+file alone, failed shared write changing nothing) plus the CLI refusal
+test; live check on an isolated library: reset refused without --yes,
+zeroed both places with it, a following sync reported 'unchanged' and
+audiobook list showed 0%.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
