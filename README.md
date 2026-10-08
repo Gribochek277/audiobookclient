@@ -1,7 +1,7 @@
 > Sanitized mirror of Forgejo `serhii/audiobookclient`. Source code is not published here.
 >
 > Commit texts: `commits/`. Need the code? Email: sergeyalpatov1@gmail.com
-> Source: Forgejo `serhii/audiobookclient` | Synced: 2026-10-08T03:57:58Z
+> Source: Forgejo `serhii/audiobookclient` | Synced: 2026-10-08T05:33:36Z
 
 ---
 
@@ -10,7 +10,9 @@
 Offline-first TUI client for a personal audiobook library that lives on a Synology NAS
 (`silo`). The app downloads books into a local file cache, plays them with **mpv** (listen
 anywhere, offline), and syncs "where am I" progress back to the NAS over the home LAN
-(**SMB via rclone**, FTP fallback).
+(**SMB via rclone**, FTP fallback). The library can also be a **plain folder on this
+machine** (`protocol = "local"`) — for a second computer with no NAS: nothing is
+downloaded, everything plays in place (see *Local-first* below).
 
 ```
 ▶ CONTINUE  Ray Bradbury - Fahrenheit 451   12:34:56 / 21:00:00  ███████░░░ 62%  [pop-os-1]
@@ -39,6 +41,8 @@ anywhere, offline), and syncs "where am I" progress back to the NAS over the hom
 | library | `o` | sort: recent / A–Z / progress |
 | library | `s` | sync with the NAS (background; conflict dialog if needed) |
 | library | `g` / `G` | first / last |
+| library | `pgup` / `pgdn` | previous / next page (`[ui] page_size`, default 10) |
+| library | `d` / `x` | download the selected book before listening / cancel it |
 | library | `q` | quit (pushes unsynced progress if any) |
 | library | left-click | select the clicked book; a second click on the same row within 400 ms opens it (Enter) |
 | library | wheel up/down | move the selection one row, clamped at the ends |
@@ -56,6 +60,11 @@ Playback waits for the current chapter only; already-cached chapters switch
 instantly. The book screen shows position / total / remaining; the total is an
 estimate (`~`) until every chapter's length has been measured. The library
 marks books that are fully or partly cached with `⬇`.
+
+The library shows **10 books per page** by default (`[ui] page_size`; `0` puts the
+whole library on one page). `PgUp`/`PgDn` flip a page, the header shows `page 2/3`
+when there is more than one, and the setting is editable from the TUI: `c` opens
+the settings screen, where every value is a field or a switch rather than raw text.
 
 The cache has a size budget (`[cache] limit_gb`, default **10**, `0` = no limit).
 When a whole book has finished downloading — and at startup — the cache is
@@ -82,10 +91,41 @@ password = "your-password"
 protocol = "smb"        # or "ftp"
 share = "homes"         # SMB share name (ignored for ftp)
 path = "Audiobooks"     # library root inside the share / from the FTP root
+
+[cache]
+# limit_gb = 10         # cache budget in GB; 0 = no limit
+
+[ui]
+# page_size = 10        # books per library page; 0 = show the whole library
 ```
 
 `audiobook` also generates a private `~/.config/audiobook/rclone.conf` (mode 0600)
-from the `[silo]` section — you never edit rclone config by hand.
+from the `[silo]` section — you never edit rclone config by hand. This is only
+done for `smb`/`ftp`: a local library needs no remote.
+
+## Local-first (a folder instead of the NAS)
+
+On a machine that has no NAS, point the app at a folder and it works against it
+directly — no downloads, no cache, nothing to keep in sync by hand:
+
+```toml
+[silo]
+protocol = "local"
+path = "/home/me/audiobooks"   # an absolute folder on this machine
+```
+
+- `host`, `user`, `password` and `share` are ignored (and optional) in this mode;
+  **rclone is neither required nor called**, and `[cache] limit_gb` does not apply
+- chapters are played straight from the folder, so the disk never holds a second
+  copy; `audiobook cache status` says so and `audiobook cache clean` refuses to run
+  (the files are the library, not a cache)
+- progress is written into `audiobook-library.json` **inside the folder**, so the
+  folder carries the listening positions with it (sync uses the folder as its
+  transport, exactly like the NAS)
+- `audiobook doctor` checks the folder instead of NAS reachability, and the
+  library marks (⬇) are not shown: every book is already local
+- the Settings screen (`c`) switches a library between `smb`, `ftp` and `local`;
+  for `local` the credential rows are dimmed and only the folder is editable
 
 Synology NAS note: for `protocol = "ftp"` the generated rclone section adds
 `disable_mlsd = true` automatically — Synology's FTP answers MLSD with a malformed
