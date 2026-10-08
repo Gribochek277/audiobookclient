@@ -1,0 +1,43 @@
+repository: serhii/audiobookclient
+commit: 9d4097f116dc98c6a55353656dd27e41fb4f6ac6
+date: 2026-10-08T07:29:59+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Library pagination: configurable page size, 10 books by default
+The main screen pages through the library instead of growing one long
+list:
+
+- new [ui] section with page_size (default 10); 0 shows the whole
+  library on one page. An existing config without the section gets the
+  default, and the generated template documents the key
+- the current page is DERIVED from the selected row (page = selected /
+  size), never stored separately: filtering, sorting, a search or a
+  page-size change can therefore never strand the view on an empty
+  page, and the page always contains the selection
+- PageUp/PageDown jump a whole page (clamped at the ends, no-op when
+  pagination is off); j/k, the wheel and g/G keep their one-row
+  semantics and the page follows the selection
+- the list, its mouse hit regions and the list selection are all
+  page-local, so clicking the 3rd row of page 2 selects the 13th book
+- the header shows 'page n/m' inside the left block (the right-hand key
+  hints are already clipped on narrow terminals) and only when there is
+  more than one page; the header text and its hit regions are now built
+  by one function so tab columns cannot drift
+- rows scrolled out of the list viewport no longer register hit
+  regions: with more rows than the viewport (page_size 0 or a big page)
+  their rects used to land on the footer and steal clicks there
+
+6 model tests (page slicing, page follows selection, page_size 0,
+page-local selection, clamping on filter/page-size change) and 5 screen
+tests (indicator, PageUp/PageDown, page-local click, page_size 0, wheel
+crossing a page edge); live pty E2E with 25 books and page_size 10:
+'page 1/3' lists A..J, PageDown shows 'page 2/3' with K..T and moves
+the selection to the first row of the page.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
