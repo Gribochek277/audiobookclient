@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: 010d8ffa7d8c248b9d23071d6f23c0724e74fadf
+date: 2026-10-08T07:17:14+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+orchestrator: add tickets 15..16
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
