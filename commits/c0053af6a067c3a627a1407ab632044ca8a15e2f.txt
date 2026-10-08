@@ -1,0 +1,32 @@
+repository: serhii/audiobookclient
+commit: c0053af6a067c3a627a1407ab632044ca8a15e2f
+date: 2026-10-08T11:26:13+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Transport: drain a helper's output while it runs
+`audiobook list`, `scan` and `sync` hung for the full 300 s transport
+timeout on a real library and then failed with 'timed out after 300s',
+while the same rclone command ran in 2 s by hand. Cause: the waiter
+polled the child for exit and only read its stdout afterwards, so once
+the listing JSON grew past the OS pipe buffer (~64 KiB — that library's
+`lsjson -R` is 68 KB) rclone blocked writing to the full pipe, never
+exited, and was killed as a timeout. The TUI was unaffected only because
+it usually reuses a cached listing.
+
+The waiter now starts two reader threads (stdout and stderr) right after
+spawn and only polls `try_wait` for exit/timeout, joining the readers to
+build the Output once the child is reaped. Timeout and cancellation
+semantics are unchanged: a child that never exits still hits the
+deadline, and `cancel` still kills the helper early (the download path).
+
+Regression test: a fake library with 3000 chapters (several pipe buffers
+of lsjson) lists completely and keeps the last entry — against the old
+code it takes the full timeout and fails.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
