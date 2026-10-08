@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: a7f743313dbea3341e41804ca376f0c610f136fa
+date: 2026-10-08T11:05:47+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+tickets: phantom books from a cached listing (19) + sync --prune (20)
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
