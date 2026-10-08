@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: ef065a0dc08020b57547a75df68107716ba24310
+date: 2026-10-08T07:17:45+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+tickets: library pagination (12-14) and local-first mode (15-16)
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
