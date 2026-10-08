@@ -1,0 +1,40 @@
+repository: serhii/audiobookclient
+commit: 532f4996fadbf9cf655a321aa23ec82818666e22
+date: 2026-10-08T11:13:36+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+sync --prune: forget books the library no longer has
+Renaming books in the library left their old keys in the local store
+forever: the sync keeps a record for a book a listing does not mention
+(deliberate — an unreachable or partial NAS must not wipe progress), so
+the library showed duplicates next to the real books (found on a real
+library: six renamed Dune volumes).
+
+- new `LocalStore::prune_missing(&present)` forgets books whose key is
+  absent from the given set, with their chapter rows, and returns what
+  it removed; idempotent
+- new `sync_io::prune_missing(store, listing)` refuses to touch anything
+  for a cached (non-authoritative) listing — a cache cannot prove a book
+  is gone — and reports the pruned keys
+- `SyncReport::pruned` carries them (included in is_empty and in the TUI
+  summary line), and `audiobook sync --prune` runs the prune against the
+  real listing the CLI already does, printing '🗑 pruned (no longer in
+  the library)' per book or 'nothing to prune' when the store is clean
+- the default (`audiobook sync`) still reports the books as 'missing on
+  NAS (kept locally)' and keeps them; README documents the flag next to
+  the reset section
+
+2 new unit tests (the store prune keeps present books, removes chapter
+rows and is idempotent; the sync-level prune ignores a cached listing
+and then prunes with a live one); live check on an isolated fixture: a
+stale 'Old Name' record survived a plain sync ('kept locally'), was
+removed with --prune (chapter row too) while the real book kept its
+1234 s of progress, and a second run reported nothing to prune.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
