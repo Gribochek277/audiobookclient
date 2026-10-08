@@ -1,7 +1,7 @@
 > Sanitized mirror of Forgejo `serhii/audiobookclient`. Source code is not published here.
 >
 > Commit texts: `commits/`. Need the code? Email: sergeyalpatov1@gmail.com
-> Source: Forgejo `serhii/audiobookclient` | Synced: 2026-10-08T05:58:10Z
+> Source: Forgejo `serhii/audiobookclient` | Synced: 2026-10-08T07:57:27Z
 
 ---
 
@@ -71,7 +71,9 @@ When a whole book has finished downloading — and at startup — the cache is
 trimmed back to the budget: **finished** books go first, then the least recently
 played ones. The book currently open is never dropped, and a book is only
 evicted when the cache is actually over the limit. `audiobook cache status`
-shows usage against the limit.
+shows usage against the limit, and also reports the **unused default cache**
+(`~/.cache/audiobook/files`) when you changed `[cache] dir` and the old
+directory still holds files — `audiobook cache clean --legacy` removes it.
 
 ## Setup
 
