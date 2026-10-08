@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: fb020e63d36216543af2b05d897af8dcc0688c96
+date: 2026-10-08T10:51:37+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+ticket 18: surface the orphaned default cache
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
