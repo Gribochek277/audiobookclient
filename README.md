@@ -1,7 +1,7 @@
 > Sanitized mirror of Forgejo `serhii/audiobookclient`. Source code is not published here.
 >
 > Commit texts: `commits/`. Need the code? Email: sergeyalpatov1@gmail.com
-> Source: Forgejo `serhii/audiobookclient` | Synced: 2026-10-08T05:33:37Z
+> Source: Forgejo `serhii/audiobookclient` | Synced: 2026-10-08T05:58:10Z
 
 ---
 
@@ -171,9 +171,33 @@ State lives in **one file** — `audiobook-library.json` in the library root on 
     "finished": false, "last_played_at": "2026-…Z", "client": "pop-os-1" } } }
 ```
 
+Where exactly it lives on a machine (`$XDG_DATA_HOME` defaults to `~/.local/share`):
+
+| Path | What |
+|---|---|
+| `~/.local/share/audiobook/library.db` | **this device's progress** (SQLite: one row per book, plus the chapter lists/durations) |
+| `~/.local/share/audiobook/nas-manifest.json` | cached library listing (not progress) |
+| `<library root>/audiobook-library.json` | the shared progress (on the NAS, or inside the folder for a local library) |
+| `~/.cache/audiobook/files` | downloaded audio (remote libraries only) |
+
 Sync rules (per book): local newer → push; remote newer → pull; both changed since the
 last sync with different values → **conflict** (device vs. server, both positions and
 timestamps shown). The NAS file is written atomically (temp file + server-side rename).
+
+### Starting over
+
+```sh
+audiobook reset --yes     # zero every book's progress locally AND in the library file
+audiobook reset --yes --local   # only this machine (the library file keeps its copy)
+```
+
+`reset` clears position, current chapter and the finished flag for every book — total
+durations, chapter lists and the audio files stay untouched (use `audiobook cache clean`
+for the downloads). It rewrites the library's shared state file first, so a failed write
+changes nothing at all and a later `sync` cannot bring the old positions back. Deleting
+the local `library.db` by hand also works, but beware: a *clean* local record that still
+has progress is pushed back to the library on the next sync, which is why progress can
+reappear after deleting the shared file by hand.
 
 In the TUI, sync runs on a background worker (the UI never freezes):
 
