@@ -1,0 +1,29 @@
+repository: serhii/audiobookclient
+commit: 15c48a2e54aca8bf332184c3a9959276ff0dc563
+date: 2026-10-08T11:08:49+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Sync: a cached listing must not create books
+The library showed 12 rows where the NAS holds 8: the TUI's automatic
+startup sync reuses a cached listing for up to 6 hours, and a cached
+listing still names books that were renamed since. Importing those names
+created empty phantom books next to the real ones (found on a real
+library: six renamed Dune volumes came back as six extra rows).
+
+The import rule is now symmetric with the deletion rule right above it:
+a cached (non-authoritative) listing may refresh books it knows, but it
+is no more proof that a book exists than it is proof that one is gone —
+so `(None, None)` only imports when the listing is authoritative (a real
+directory scan). Records are still never dropped on account of a cache.
+
+New test: a cached listing naming an unknown book imports nothing and
+leaves the store untouched, while the same listing marked authoritative
+imports it (the fresh-device case keeps working).
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
