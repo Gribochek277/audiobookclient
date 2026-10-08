@@ -1,0 +1,37 @@
+repository: serhii/audiobookclient
+commit: 3b6bd9c33063dbb4b340475dd0962cc8ea6a778e
+date: 2026-10-08T08:31:33+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Local mode in the settings screen, documented
+Finishes the local-first feature on the configuration side:
+
+- the Settings screen's protocol row cycles smb -> ftp -> local, and
+  every row adapts to the mode: for local, host/user/password are inert
+  (dimmed, skipped by navigation, never written) with the hint 'not used
+  by a local library', share says 'n/a for local', and path is the only
+  editable silo field with the hint 'absolute folder on this machine'
+- the screen now starts on the first *editable* row, so a local config
+  opens focused on the protocol toggle instead of an inert credential
+  row (the same rule navigation uses)
+- committing a local config validates the folder (an empty path is
+  rejected with the field name) and writes protocol = "local" plus the
+  folder through the existing saver; no rclone remote is regenerated
+- README: a Local-first section (what to set, that rclone is neither
+  required nor called, that nothing is cached, that cache clean refuses
+  and that the folder carries audiobook-library.json with the progress),
+  plus the intro and the setup notes
+
+4 new unit tests (credential rows inert + unreachable by navigation,
+rendered hints, committing the folder round-trips, empty folder
+rejected); live pty E2E: switching ftp -> local in the TUI showed
+'[local]' with the credential rows marked unused and wrote
+protocol = "local" to the config file.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
