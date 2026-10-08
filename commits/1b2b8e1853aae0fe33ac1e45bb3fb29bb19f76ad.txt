@@ -1,0 +1,38 @@
+repository: serhii/audiobookclient
+commit: 1b2b8e1853aae0fe33ac1e45bb3fb29bb19f76ad
+date: 2026-10-08T06:55:26+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Library download button: mouse-driven prefetch with progress and cancel
+The library screen gets a footer action line, so downloading a book
+before listening is a button, not just a key:
+
+- ' d download' starts a prefetch of the selected row through exactly
+  the same path as the d key; 'x cancel' stops the transfer in flight
+  and drops the queue. Both are recorded as hit regions and drawn
+  undimmed, matching the book screen's transport-row convention
+- while a prefetch runs the footer shows the book and its progress
+  ('down-arrow Book - Title  1/4 chapters') plus how many books are
+  waiting; cancel is only a button (and only undimmed) when there is
+  something to cancel
+- the footer has its own line, so it never overlaps the list rows:
+  single click still selects, double click still opens
+- help: the library section documents d and x on one line
+- help overlay: a short terminal now clips the tail of the overlay
+  instead of showing nothing (with the extra key line the 20-row test
+  terminal silently lost the whole overlay, which looks like a hang);
+  the box needs only 3 rows to render at all
+
+6 new unit tests (footer hit regions, cancel gating, cancel dropping
+the queue, footer progress text, help keys, clipped overlay); live pty
+E2E: a mouse click on the footer download button fetched the selected
+book (3 chapters, status 'downloaded ...'), and a click on cancel
+aborted the transfer mid-book (1 of 3 chapters in the cache).
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
