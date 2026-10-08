@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: ea0855dda437f88ca2b0a348614f3914fe18e976
+date: 2026-10-08T08:51:44+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+ticket 17: reset listening progress
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
