@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: c9528af65806f44c706503be1997a04922d5aa9b
+date: 2026-10-08T11:32:43+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Merge ticket 22: 22-22-cli-sync-refreshes-the-listing-cache
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
