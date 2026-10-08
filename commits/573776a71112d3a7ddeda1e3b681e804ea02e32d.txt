@@ -1,0 +1,26 @@
+repository: serhii/audiobookclient
+commit: 573776a71112d3a7ddeda1e3b681e804ea02e32d
+date: 2026-10-08T11:31:58+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+sync: keep the listing the CLI just fetched
+`audiobook sync` listed the library for real and then threw the result
+away: the manifest cache kept whatever it had, so the TUI's automatic
+startup sync could keep working from a listing up to six hours old and
+newly added books stayed invisible even though the CLI had just seen
+them (hit while pruning a real library).
+
+The CLI now resolves its listing through `sync_io::resolve_listing(...,
+force = true)`, the same path the TUI's manual `s` uses: it lists for
+real, stays authoritative (so `--prune` is unaffected) and writes the
+fresh entries back into the cache. The existing cache test now also
+asserts the forced listing replaces the manifest with a current
+timestamp and the same entries.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
