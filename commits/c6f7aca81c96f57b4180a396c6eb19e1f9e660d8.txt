@@ -1,0 +1,53 @@
+repository: serhii/audiobookclient
+commit: c6f7aca81c96f57b4180a396c6eb19e1f9e660d8
+date: 2026-10-08T08:22:46+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Local-first mode: a library folder on this machine, no NAS
+protocol = "local" turns the library into a plain folder and the app
+works against it directly, for a second computer that has no remote
+server:
+
+- config: a third protocol value with only `path` required (host, user,
+  password and share become optional and are ignored); no rclone remote
+  is generated or looked for. `audiobook setup`'s template documents it
+- transport: `make_transport` returns the local-directory transport for
+  a local library, so listing, sync and the manifest all work against
+  the folder — with rclone missing or broken. The CLI (list, scan, sync)
+  goes through the same builder instead of constructing an rclone
+  transport directly
+- playback: new `LocalSource` resolves chapters straight from the
+  library (`root/rel`) and reports a missing file instead of
+  downloading; nothing is copied, and the cache directory is never even
+  resolved for a local library (no marks, no startup trim, no help-line
+  budget, no eviction)
+- cache maintenance is a no-op there: the finished-book cleanup prompt
+  is skipped, the whole-book download queue is not started (the download
+  key reports 'local library — every chapter is already here'), the
+  library prefetch says the book is already here, and `audiobook cache
+  clean` refuses to run — in this mode the 'cache' would be the user's
+  only copy
+- `audiobook doctor` checks the folder instead of NAS reachability and
+  treats rclone as not needed; `cache status` explains that nothing is
+  cached
+- progress still travels through the library's own shared state file
+  (audiobook-library.json next to the books), so the folder stays
+  portable across machines
+
+7 new unit tests (config parsing/validation without credentials, no
+rclone section, the local transport, LocalSource resolution, a local
+book plan that leaves the cache empty, the prefetch and download-queue
+messages); live E2E on a fresh data dir with a deliberately failing
+rclone in PATH: the TUI imported both books from the folder ('2
+imported'), played a chapter with mpv straight from it (2s of a 4s mp3
+with the duration measured locally), left the cache empty, and the
+folder's state file received the progress ('pushed: B - Beta'); doctor
+and cache commands report local mode.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
