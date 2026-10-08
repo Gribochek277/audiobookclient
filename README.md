@@ -1,7 +1,7 @@
 > Sanitized mirror of Forgejo `serhii/audiobookclient`. Source code is not published here.
 >
 > Commit texts: `commits/`. Need the code? Email: sergeyalpatov1@gmail.com
-> Source: Forgejo `serhii/audiobookclient` | Synced: 2026-10-08T07:57:27Z
+> Source: Forgejo `serhii/audiobookclient` | Synced: 2026-10-08T08:15:25Z
 
 ---
 
@@ -192,6 +192,18 @@ timestamps shown). The NAS file is written atomically (temp file + server-side r
 audiobook reset --yes     # zero every book's progress locally AND in the library file
 audiobook reset --yes --local   # only this machine (the library file keeps its copy)
 ```
+
+Renaming or reorganising books in the library leaves their old keys behind: the sync
+keeps a local record for a book a listing does not mention (so an unreachable NAS cannot
+wipe progress), which shows up as extra rows. Forget them explicitly, against a real
+listing:
+
+```sh
+audiobook sync --prune    # sync, then drop local records of books no longer in the library
+```
+
+A cached listing never prunes (it cannot prove a book is gone), and imports follow the
+same rule — only a real listing may create books.
 
 `reset` clears position, current chapter and the finished flag for every book — total
 durations, chapter lists and the audio files stay untouched (use `audiobook cache clean`
