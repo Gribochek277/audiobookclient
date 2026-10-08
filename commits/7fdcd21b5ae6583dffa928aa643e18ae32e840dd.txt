@@ -1,0 +1,37 @@
+repository: serhii/audiobookclient
+commit: 7fdcd21b5ae6583dffa928aa643e18ae32e840dd
+date: 2026-10-08T07:47:46+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Settings: page size editable from the TUI, docs for [ui]
+The library page size is now a first-class setting instead of a
+config-file-only knob:
+
+- the Settings screen gains a [ui] section with a numeric page_size row
+  (digits only, hint 'books per library page, 0 = all'), edited and
+  committed through the same field machinery as the other sections
+- leaving the Settings screen applies the committed page size to the
+  library immediately, without a restart; the page is derived from the
+  selection, so growing or shrinking the page size just re-slices the
+  list (a size larger than the library collapses to one page)
+- an empty value is rejected with the field name and the working copy
+  reverts in place, like the other numeric field
+- README: [ui] page_size documented next to [cache] (default 10, 0 =
+  all), the pgup/pgdn keys and the download keys are in the key table,
+  and the pagination paragraph explains the header indicator; the help
+  overlay mentions PgUp/PgDn in the library section and the row in the
+  settings section
+
+4 new unit tests (ui section renders, commit repages the library,
+page_size 0 shows everything, empty value rejected); live pty E2E on an
+isolated 25-book library: focus reached '> page_size: 10', the edit
+committed 'page_size = 3' to the file, and the library immediately
+showed 'page 1/9' with three rows.
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
