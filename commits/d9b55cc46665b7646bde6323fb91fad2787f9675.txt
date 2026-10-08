@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: d9b55cc46665b7646bde6323fb91fad2787f9675
+date: 2026-10-08T11:14:25+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+Merge ticket 20: 20-20-sync-prune-missing-books
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
