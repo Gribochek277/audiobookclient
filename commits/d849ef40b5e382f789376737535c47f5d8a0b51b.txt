@@ -1,0 +1,14 @@
+repository: serhii/audiobookclient
+commit: d849ef40b5e382f789376737535c47f5d8a0b51b
+date: 2026-10-08T11:23:28+03:00
+author: Serhii <36171312+Gribochek277@users.noreply.github.com>
+branches: main
+
+message:
+ticket 21: drain helper output while the child runs
+
+---
+Source code is NOT published on GitHub.
+My code is hosted on a private server - this repository only reflects my working activity.
+README (if any) is available in the repo root.
+If you need the code, email: sergeyalpatov1@gmail.com
